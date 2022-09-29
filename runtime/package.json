@@ -1,0 +1,13 @@
+{
+  "name": "@opwork/runtime",
+  "version": "1.0.0",
+  "description": "OpWork's execution context",
+  "main": "index.js",
+  "repository": "https://github.com/hisorange/opwork",
+  "author": "Zsolt Varga <hello@hisorange.me>",
+  "license": "GPL-3.0",
+  "private": false,
+  "dependencies": {
+    "workerd": "^1.20220926.3"
+  }
+}
