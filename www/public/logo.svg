@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="100%" height="100%" viewBox="0 0 480 480" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve" xmlns:serif="http://www.serif.com/" style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;">
+	<g transform="matrix(1.12744,0,0,1.09969,-30.6097,-22.0989)">
+		<path fill="currentColor" d="M444.024,133.764C444.024,76.048 398.319,29.189 342.023,29.189L138.021,29.189C81.725,29.189 36.019,76.048 36.019,133.764L36.019,342.914C36.019,400.631 81.725,447.489 138.021,447.489L342.023,447.489C398.319,447.489 444.024,400.631 444.024,342.914L444.024,133.764Z" style="fill:rgb(235,235,235);fill-opacity:0;" />
+		<path fill="currentColor" d="M444.024,133.764C444.024,76.048 398.319,29.189 342.023,29.189L138.021,29.189C81.725,29.189 36.019,76.048 36.019,133.764L36.019,342.914C36.019,400.631 81.725,447.489 138.021,447.489L342.023,447.489C398.319,447.489 444.024,400.631 444.024,342.914L444.024,133.764ZM426.285,133.764L426.285,342.914C426.285,390.593 388.529,429.302 342.023,429.302L138.021,429.302C91.515,429.302 53.759,390.593 53.759,342.914L53.759,133.764C53.759,86.085 91.515,47.376 138.021,47.376L342.023,47.376C388.529,47.376 426.285,86.085 426.285,133.764Z" />
+	</g>
+	<g fill="currentColor" transform="matrix(1,0,0,1,-4.50731,94.207)">
+		<text x="67.32px" y="188.196px" style="font-family:'DINAlternate-Bold', 'DIN Alternate', sans-serif;font-weight:700;font-size:288px;">
+			OP
+		</text>
+	</g>
+	<g fill="currentColor" transform="matrix(1,0,0,1,167.111,29.0349)">
+		<text x="-94.002px" y="370.519px" style="font-family:'DINAlternate-Bold', 'DIN Alternate', sans-serif;font-weight:700;font-size:120px;">
+			WORK
+		</text>
+	</g>
+</svg>

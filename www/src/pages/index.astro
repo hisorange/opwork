@@ -1,17 +1,84 @@
 ---
+import hero from "../images/hero.svg";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="Self Hosted Workerd - OpWork">
-  <main>
-    <h1>Hello, OpWork!</h1>
-    <p class="instructions">Just loading the site...</p>
+<Layout title="Self Hosted CloudFlare Worker in Docker - OpWork">
+  <nav class="sticky bg-midnight text-white font-thin text-xl">
+    <div class="container max-w-7xl mx-auto flex items-center h-12">
+      <a href="https://opwork.dev" target="_self">
+        <svg
+          width="40"
+          height="40"
+          class="mr-3"
+          viewBox="0 0 480 480"
+          version="1.1"
+          xmlns="http://www.w3.org/2000/svg"
+          xmlns:xlink="http://www.w3.org/1999/xlink"
+          xml:space="preserve"
+          xmlns:serif="http://www.serif.com/"
+          style="fill-rule:evenodd;clip-rule:evenodd;stroke-linejoin:round;stroke-miterlimit:2;"
+        >
+          <g transform="matrix(1.12744,0,0,1.09969,-30.6097,-22.0989)">
+            <path
+              fill="currentColor"
+              d="M444.024,133.764C444.024,76.048 398.319,29.189 342.023,29.189L138.021,29.189C81.725,29.189 36.019,76.048 36.019,133.764L36.019,342.914C36.019,400.631 81.725,447.489 138.021,447.489L342.023,447.489C398.319,447.489 444.024,400.631 444.024,342.914L444.024,133.764Z"
+              style="fill:rgb(235,235,235);fill-opacity:0;"></path>
+            <path
+              fill="currentColor"
+              d="M444.024,133.764C444.024,76.048 398.319,29.189 342.023,29.189L138.021,29.189C81.725,29.189 36.019,76.048 36.019,133.764L36.019,342.914C36.019,400.631 81.725,447.489 138.021,447.489L342.023,447.489C398.319,447.489 444.024,400.631 444.024,342.914L444.024,133.764ZM426.285,133.764L426.285,342.914C426.285,390.593 388.529,429.302 342.023,429.302L138.021,429.302C91.515,429.302 53.759,390.593 53.759,342.914L53.759,133.764C53.759,86.085 91.515,47.376 138.021,47.376L342.023,47.376C388.529,47.376 426.285,86.085 426.285,133.764Z"
+            ></path>
+          </g>
+          <g fill="currentColor" transform="matrix(1,0,0,1,-4.50731,94.207)">
+            <text
+              x="67.32px"
+              y="188.196px"
+              style="font-family:'DINAlternate-Bold', 'DIN Alternate', sans-serif;font-weight:700;font-size:288px;"
+            >
+              OP
+            </text>
+          </g>
+          <g fill="currentColor" transform="matrix(1,0,0,1,167.111,29.0349)">
+            <text
+              x="-94.002px"
+              y="370.519px"
+              style="font-family:'DINAlternate-Bold', 'DIN Alternate', sans-serif;font-weight:700;font-size:120px;"
+            >
+              WORK
+            </text>
+          </g>
+        </svg>
+      </a>
+      <h1 class="flex-shrink">OpWork - Self Hosted CloudFlare Workers</h1>
+      <div class="flex-grow text-right">
+        <a
+          class="mr-5 bg-primary hover:bg-secondary font-normal ease-blink transition-colors duration-300 text-midnight py-1 px-6 rounded-sm"
+          href="https://github.com/hisorange/opwork"
+        >
+          Get Started
+        </a>
+      </div>
+    </div>
+  </nav>
 
-    <h3>Quick start:</h3>
-    <code> docker run -it -p80:3000 opwork/runtime:latest</code>
+  <main class="container max-w-7xl text-center mx-auto py-6">
+    <h3 class="my-4 text-4xl">Quick Start with Docker</h3>
 
-    <hr />
-    But you can check out the demo <a href="https://runtime.opwork.dev/">here</a
-    >.
+    <img src={hero} class="w-1/2 mx-auto" />
+
+    <input
+      type="text"
+      onclick="this.select()"
+      value="docker run -it -p80:3000 opwork/runtime:latest"
+      class="min-w-64 w-1/2 border-midnight border border-solid rounded-md bg-gray-700 text-white text-center text-2xl p-2"
+    />
+
+    <hr class="my-6" />
+    <p>
+      Or you can check out the demo <a
+        href="https://runtime.opwork.dev/"
+        class="text-secondary underline">here</a
+      >
+    </p>
   </main>
 </Layout>
