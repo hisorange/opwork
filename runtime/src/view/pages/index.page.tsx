@@ -1,4 +1,4 @@
-import { Divider, Typography } from 'antd';
+import { List, PageHeader } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { IWorker } from '../../server/types/worker.interface';
 
@@ -13,16 +13,16 @@ export default function IndexPage() {
 
   return (
     <>
-      <Typography.Title>Services</Typography.Title>
-      <Divider />
-
-      <ul>
+      <PageHeader title="Services" />
+      <List>
         {services.map(service => (
-          <li key={service.name}>
-            <a href={`/service/${service.name}`}>{service.name}</a>
-          </li>
+          <List.Item key={service.name}>
+            <a className="text-lg indent-5" href={`/service/${service.name}`}>
+              - {service.name}
+            </a>
+          </List.Item>
         ))}
-      </ul>
+      </List>
     </>
   );
 }
