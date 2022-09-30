@@ -1,9 +1,9 @@
-import { writeFile } from "fs/promises";
-import { join } from "path";
-import { IWorker } from "../types/worker.interface";
+import { writeFile } from 'fs/promises';
+import { join } from 'path';
+import { IWorker } from '../types/worker.interface';
 
 export const generateWorkerdConfig = async (services: IWorker[]) => {
-  console.log("Generating config...");
+  console.log('Generating config...');
 
   const template = `using Workerd = import "/workerd/workerd.capnp";
 
@@ -11,36 +11,36 @@ export const generateWorkerdConfig = async (services: IWorker[]) => {
     services = [
       ${services
         .map(
-          (worker) =>
-            `(name = "${worker.name}", worker = .${worker.name}Worker),`
+          worker =>
+            `(name = "${worker.name}", worker = .${worker.name}Worker),`,
         )
-        .join("\n")}
+        .join('\n')}
     ],
 
     sockets = [
       ${services
         .map(
-          (worker) =>
+          worker =>
             `(
               name = "${worker.name}",
               address = "localhost:${worker.port}",
               http=(),
               service="${worker.name}"
-            ),`
+            ),`,
         )
-        .join("\n")}
+        .join('\n')}
     ]
   );
 
   ${services
     .map(
-      (worker) => `
+      worker => `
   const ${worker.name}Worker :Workerd.Worker = (
     serviceWorkerScript = embed "services/${worker.name}/entry.js",
     compatibilityDate = "2022-09-16",
-  );`
+  );`,
     )
-    .join("\n")}`;
+    .join('\n')}`;
 
-  return writeFile(join(__dirname, "../../workerd.capnp"), template);
+  return writeFile(join(__dirname, '../../../workerd.capnp'), template);
 };
