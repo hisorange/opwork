@@ -1,4 +1,4 @@
-name: 'Docker - Build Docker Runtime'
+name: 'Build - Docker Runtime'
 
 on:
   workflow_dispatch:
