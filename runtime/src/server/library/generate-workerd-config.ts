@@ -1,9 +1,10 @@
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
 import signale from 'signale';
-import { IWorker } from '../types/worker.interface';
+import { fetchServices } from './fetch-services';
 
-export const generateWorkerdConfig = async (services: IWorker[]) => {
+export const generateWorkerdConfig = async () => {
+  const services = await fetchServices();
   const template = `using Workerd = import "/workerd/workerd.capnp";
 
   const config :Workerd.Config = (

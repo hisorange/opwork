@@ -1,3 +1,5 @@
-addEventListener("fetch", (event) => {
-  event.respondWith(new Response("Hello, OpWork: " + new Date().toISOString()));
+addEventListener('fetch', event => {
+  event.respondWith(
+    new Response('Hello, OpWorkerX! ' + new Date().toISOString()),
+  );
 });

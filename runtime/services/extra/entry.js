@@ -1,5 +1,5 @@
 addEventListener("fetch", (event) => {
   event.respondWith(
-    new Response("Second, OpWork! " + new Date().toISOString())
+    new Response("Second, OpWorker! " + new Date().toISOString())
   );
 });

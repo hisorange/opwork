@@ -19,7 +19,7 @@ export const main = async () => {
   await registerRestApi(server);
   await registerAdmin(server);
 
-  await createWorkerdProcess(services);
+  await createWorkerdProcess();
   await registerUpstreams(services, server);
 
   await server.listen({ port: 3000, host: '0.0.0.0' });
