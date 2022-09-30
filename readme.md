@@ -15,7 +15,7 @@ OpWork is a management interface built for CloudFlare's [Workerd](https://github
 Single line to install, that's all what you need.
 
 ```bash
-docker run -it -80:3000 opwork/runtime:latest
+docker run -it -p80:3000 opwork/runtime:latest
 ```
 
 Then visit the [localhost](http://localhost) address to see the administration page.
