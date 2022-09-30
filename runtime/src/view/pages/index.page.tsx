@@ -5,7 +5,7 @@ export default function IndexPage() {
   const [services, setServices] = useState<IWorker[]>([]);
 
   useEffect(() => {
-    fetch("/_/services")
+    fetch("/api/services")
       .then((res) => res.json())
       .then((data) => setServices(data));
   }, []);
