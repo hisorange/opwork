@@ -1,10 +1,9 @@
 import { writeFile } from 'fs/promises';
 import { join } from 'path';
+import signale from 'signale';
 import { IWorker } from '../types/worker.interface';
 
 export const generateWorkerdConfig = async (services: IWorker[]) => {
-  console.log('Generating config...');
-
   const template = `using Workerd = import "/workerd/workerd.capnp";
 
   const config :Workerd.Config = (
@@ -41,6 +40,8 @@ export const generateWorkerdConfig = async (services: IWorker[]) => {
   );`,
     )
     .join('\n')}`;
+  signale.success('Workerd config generated');
 
-  return writeFile(join(__dirname, '../../../workerd.capnp'), template);
+  await writeFile(join(__dirname, '../../../workerd.capnp'), template);
+  signale.success('Workerd config materialized');
 };

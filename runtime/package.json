@@ -20,6 +20,7 @@
     "@fastify/static": "^6.5.0",
     "fastify": "^4.6.0",
     "middie": "^7.1.0",
+    "signale": "^1.4.0",
     "workerd": "^1.20220926.3"
   },
   "devDependencies": {
@@ -27,6 +28,7 @@
     "@types/node": "^18.7.23",
     "@types/react": "^18.0.21",
     "@types/react-dom": "^18.0.6",
+    "@types/signale": "^1.4.4",
     "@vitejs/plugin-react": "^2.1.0",
     "antd": "^4.23.3",
     "autoprefixer": "^10.4.12",

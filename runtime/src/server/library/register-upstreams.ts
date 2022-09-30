@@ -1,20 +1,25 @@
-import { FastifyInstance } from "fastify";
-import { IWorker } from "../types/worker.interface";
+import proxy from '@fastify/http-proxy';
+import { FastifyInstance } from 'fastify';
+import signale from 'signale';
+import { IWorker } from '../types/worker.interface';
 
 export const registerUpstreams = async (
   services: IWorker[],
-  server: FastifyInstance
+  server: FastifyInstance,
 ) => {
-  const upstreams = services.map((service) => ({
-    upstream: `http://localhost:${service.port}`,
-    prefix: `/service/${service.name}`,
-    http2: false,
-  }));
+  const upstreams = services.map(service => {
+    signale.debug(`Registering service [${service.name}] to [${service.port}]`);
 
-  console.log("Startup upstreams", upstreams);
-  const proxy = require("@fastify/http-proxy");
+    return {
+      upstream: `http://localhost:${service.port}`,
+      prefix: `/service/${service.name}`,
+      http2: false,
+    };
+  });
 
   await Promise.all(
-    upstreams.map((upstream) => server.register(proxy, upstream))
+    upstreams.map(upstream => server.register(proxy, upstream)),
   );
+
+  signale.success('Upstreams registered');
 };
