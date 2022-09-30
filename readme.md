@@ -1,10 +1,10 @@
 # OpWork - Self Hosted Workerd
 
 [![Build - Docker Runtime](https://github.com/hisorange/opwork/actions/workflows/cd-runtime.yml/badge.svg?branch=main)](https://github.com/hisorange/opwork/actions/workflows/cd-runtime.yml)
-![Docker Pulls](https://img.shields.io/docker/pulls/opwork/runtime?label=Docker%20Pulls)
-![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/opwork/runtime?label=Docker%20Image)
-![GitHub last commit](https://img.shields.io/github/last-commit/hisorange/opwork?label=Last%20Update)
-![License](https://img.shields.io/github/license/hisorange/opwork?label=License)
+[![Docker Pulls](https://img.shields.io/docker/pulls/opwork/runtime?label=Docker%20Pulls)](https://hub.docker.com/r/opwork/runtime)
+[![Docker Image Size (latest by date)](https://img.shields.io/docker/image-size/opwork/runtime?label=Docker%20Image)](https://hub.docker.com/r/opwork/runtime/tags)
+[![GitHub last commit](https://img.shields.io/github/last-commit/hisorange/opwork?label=Last%20Update)](https://github.com/hisorange/opwork)
+[![License](https://img.shields.io/github/license/hisorange/opwork?label=License)](https://github.com/hisorange/opwork/blob/main/license)
 
 ---
 
@@ -32,3 +32,6 @@ Then visit the [localhost](http://localhost) address to see the administration p
 - [ ] Usage monitor
 - [ ] Documentation
 - [ ] Multi node deployment
+- [ ] NPM package
+- [ ] CapRover Template
+- [ ] DigitalOcean App Platform
