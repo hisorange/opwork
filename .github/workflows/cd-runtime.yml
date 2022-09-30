@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - "runtime/**"
+      - ".github/workflows/cd-runtime.yml"
 
 jobs:
 
@@ -34,3 +37,9 @@ jobs:
           target: 'production'
           tags: opwork/runtime:${{ steps.short-sha.outputs.sha }},opwork/runtime:latest
           context: ./runtime/
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Deploy the runtime demo
+        run: npx caprover deploy --appToken ${{ secrets.APP_TOKEN }} --caproverUrl ${{ secrets.APP_URL }} --imageName opwork/runtime:${{ steps.short-sha.outputs.sha }} --appName ${{ secrets.APP_NAME }}
