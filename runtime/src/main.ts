@@ -76,6 +76,12 @@ const startHttpServer = async () => {
   const server = Fastify();
   const services = await getServices();
 
+  server.get("/_/health", () => {
+    return {
+      status: "ok",
+    };
+  });
+
   await generateWorkerConfig(services);
   const childWorker = startWorkerService();
 

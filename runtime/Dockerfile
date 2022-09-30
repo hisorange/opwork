@@ -19,17 +19,18 @@ WORKDIR /srv
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -qy tini libc++1 && apt-get clean
 
-COPY --from=builder /temp/dist dist
 COPY --from=builder /temp/package.json package.json
 COPY --from=builder /temp/node_modules node_modules
+COPY --from=builder /temp/services services
+COPY --from=builder /temp/dist dist
 
 ENV NODE_ENV=production
 ENV PORT=3000
 
 EXPOSE 3000
 
-# HEALTHCHECK --interval=15s --timeout=5s --start-period=30s --retries=2 CMD wget --no-verbose --tries=1 --spider http://localhost:3000/_/health || exit 1
+HEALTHCHECK --interval=15s --timeout=5s --start-period=5s --retries=2 CMD wget --no-verbose --tries=1 --spider http://localhost:3000/_/health || exit 1
 
-USER node
+#USER node
 
 ENTRYPOINT [ "yarn", "start" ]
