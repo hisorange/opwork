@@ -49,7 +49,6 @@ export const registerAdmin = async (server: FastifyInstance) => {
     const dir = join(__dirname, '../../../');
 
     const viteConfig = require(join(dir, 'vite.config.js'));
-    // viteConfig.root = join(dir, "assets");
 
     const vite = require('vite');
     const viteServer = await vite.createServer(viteConfig);

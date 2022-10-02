@@ -1,6 +1,6 @@
-const { join } = require("path");
-const { defineConfig } = require("vite");
-const react = require("@vitejs/plugin-react");
+const { join } = require('path');
+const { defineConfig } = require('vite');
+const react = require('@vitejs/plugin-react');
 
 const plugins = [react()];
 
@@ -14,16 +14,18 @@ module.exports = defineConfig({
     },
   },
   plugins,
+  clearScreen: false,
   server: {
-    middlewareMode: "html",
+    middlewareMode: 'html',
+    // base: '/admin/',
     hmr: true,
   },
-  logLevel: "info",
-  root: join(__dirname, "src/view/"),
-  publicDir: "assets",
-  base: "/admin/",
+  logLevel: 'info',
+  root: join(__dirname, 'src/view/'),
+  publicDir: 'assets',
+  base: '/admin/',
   build: {
-    outDir: join(__dirname, "./dist/view/"),
+    outDir: join(__dirname, './dist/view/'),
     emptyOutDir: true,
   },
 });

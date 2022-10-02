@@ -1,13 +1,11 @@
 import {
-  FileOutlined,
+  CodeOutlined,
   PlayCircleOutlined,
   SaveOutlined,
 } from '@ant-design/icons';
-import { Button, Layout, message, notification, PageHeader } from 'antd';
+import CodeEditor from '@uiw/react-textarea-code-editor';
+import { Button, Divider, message, notification, PageHeader, Tabs } from 'antd';
 import Input from 'antd/lib/input/Input';
-import TextArea from 'antd/lib/input/TextArea';
-import { Content } from 'antd/lib/layout/layout';
-import Sider from 'antd/lib/layout/Sider';
 import axios from 'axios';
 import useAxios from 'axios-hooks';
 import React, { useEffect, useState } from 'react';
@@ -24,13 +22,22 @@ export default function EditorPage() {
   const [workerName, setWorkerName] = useState('My Worker');
   const [workerPath, setWorkerPath] = useState(id);
   const [sourceCode, setSourceCode] = useState('Hello, World');
+  const [deployPath, setDeployPath] = useState('');
   const [isCodeChanged, setIsCodeChanged] = useState(false);
+
+  const [selectedTab, setSelectedTab] = useState('code');
 
   useEffect(() => {
     if (data) {
       setWorkerPath(data.path);
       setWorkerName(data.name);
       setSourceCode(data.code);
+
+      setDeployPath(
+        `${globalThis.location.protocol}//${globalThis.location.hostname}${
+          globalThis.location.port != '80' ? `:${globalThis.location.port}` : ''
+        }/worker/${data.path}`,
+      );
     }
   }, [data]);
 
@@ -39,99 +46,115 @@ export default function EditorPage() {
   }
 
   return (
-    <Layout hasSider>
-      <Sider
-        className="min-h-screen !bg-gray-600 text-white px-2"
-        theme="light"
-      >
-        <h2 className="text-white">ID</h2>
+    <div>
+      <PageHeader
+        onBack={() => navigate('/')}
+        avatar={{
+          icon: <CodeOutlined />,
+          size: 'large',
+          shape: 'square',
+        }}
+        title="Worker Editor"
+        extra={[
+          <Button
+            key="save"
+            type={isCodeChanged ? 'primary' : 'ghost'}
+            icon={<SaveOutlined />}
+            onClick={async () => {
+              await axios.patch(`/api/workers/${id}`, {
+                name: workerName,
+                path: workerPath,
+                code: sourceCode,
+              });
 
-        {id}
+              setIsCodeChanged(false);
 
-        <h2 className="text-white">Path</h2>
-
-        <Input
-          className="mb-4"
-          value={workerPath}
-          onChange={e => setWorkerPath(e.target.value)}
-        />
-      </Sider>
-
-      <Content>
-        <PageHeader
-          onBack={() => navigate('/')}
-          avatar={{
-            icon: <FileOutlined />,
-            size: 'large',
-            shape: 'square',
-          }}
-          title={
-            <Input
-              value={workerName}
-              onChange={e => setWorkerName(e.target.value)}
-              bordered={false}
-              size="large"
-              className="text-4xl"
-            />
-          }
-          subTitle={`Available at ${globalThis.location.protocol}//${
-            globalThis.location.hostname
-          }${
-            globalThis.location.port != '80'
-              ? `:${globalThis.location.port}`
-              : ''
-          }/worker/${workerPath}`}
-          extra={[
-            <Button
-              key="save"
-              type={isCodeChanged ? 'primary' : 'ghost'}
-              icon={<SaveOutlined />}
-              onClick={async () => {
-                await axios.patch(`/api/workers/${id}`, {
-                  name: workerName,
-                  path: workerPath,
-                  code: sourceCode,
-                });
-
-                setIsCodeChanged(false);
-
-                message.success('Service updated');
-                refetch();
-              }}
-            >
-              Save
-            </Button>,
-            <Button
-              key="run"
-              type="dashed"
-              icon={<PlayCircleOutlined />}
-              onClick={async () => {
-                const reply = await axios.get(`/worker/${workerPath}`);
-
-                notification.info({
-                  message: 'Service executed:',
-                  description: JSON.stringify(reply.data),
-                  duration: 3,
-                  placement: 'bottomRight',
-                });
-              }}
-            >
-              Run
-            </Button>,
-          ]}
-        />
-        <div className="px-4">
-          <TextArea
-            rows={20}
-            className="w-full"
-            value={sourceCode}
-            onChange={e => {
-              setSourceCode(e.target.value);
-              setIsCodeChanged(true);
+              message.success('Service updated');
+              refetch();
             }}
-          />
-        </div>
-      </Content>
-    </Layout>
+          >
+            Save
+          </Button>,
+          <Button
+            key="run"
+            type="dashed"
+            disabled={isCodeChanged}
+            icon={<PlayCircleOutlined />}
+            onClick={async () => {
+              const reply = await axios.get(`/worker/${workerPath}`);
+
+              notification.info({
+                message: 'Service executed:',
+                description: JSON.stringify(reply.data),
+                duration: 3,
+                placement: 'bottomRight',
+              });
+            }}
+          >
+            Run
+          </Button>,
+        ]}
+      />
+      <div className="px-4">
+        <Tabs>
+          <Tabs.TabPane tab="Source Code" key="code">
+            <CodeEditor
+              value={sourceCode}
+              language="js"
+              placeholder="Please enter Javascript worker code."
+              onChange={e => {
+                setSourceCode(e.target.value);
+                setIsCodeChanged(true);
+              }}
+              padding={16}
+              style={{
+                fontSize: 12,
+                minHeight: 400,
+                backgroundColor: '#282a36',
+                fontFamily:
+                  'ui-monospace,SFMono-Regular,SF Mono,Consolas,Liberation Mono,Menlo,monospace',
+              }}
+            />
+          </Tabs.TabPane>
+
+          <Tabs.TabPane tab="Details" key="details">
+            <div className="max-w-xl">
+              <h2>ID</h2>
+              <code>{id}</code>
+              <Divider />
+
+              <h2>Name</h2>
+              <Input
+                value={workerName}
+                onChange={e => {
+                  setWorkerName(e.target.value);
+                  setIsCodeChanged(true);
+                }}
+                size="large"
+                className="text-4xl"
+              />
+              <Divider />
+
+              <h2>
+                Path{' '}
+                <small className="text-gray-400 text-sm italic font-thin">
+                  {deployPath}
+                </small>
+              </h2>
+
+              <Input
+                size="large"
+                className="text-4xl"
+                value={workerPath}
+                onChange={e => {
+                  setWorkerPath(e.target.value);
+                  setIsCodeChanged(true);
+                }}
+              />
+            </div>
+          </Tabs.TabPane>
+        </Tabs>
+      </div>
+    </div>
   );
 }
