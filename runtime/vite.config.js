@@ -16,8 +16,8 @@ module.exports = defineConfig({
   plugins,
   clearScreen: false,
   server: {
-    middlewareMode: 'html',
-    // base: '/admin/',
+    middlewareMode: true,
+    base: '/admin/',
     hmr: true,
   },
   logLevel: 'info',
