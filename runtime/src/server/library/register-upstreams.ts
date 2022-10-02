@@ -4,15 +4,15 @@ import signale from 'signale';
 import { IWorker } from '../types/worker.interface';
 
 export const registerUpstreams = async (
-  services: IWorker[],
+  workers: IWorker[],
   server: FastifyInstance,
 ) => {
-  const upstreams = services.map(service => {
-    signale.debug(`Registering service [${service.name}] to [${service.port}]`);
+  const upstreams = workers.map(worker => {
+    signale.debug(`Registering worker [${worker.name}] to [${worker.port}]`);
 
     return {
-      upstream: `http://localhost:${service.port}`,
-      prefix: `/service/${service.name}`,
+      upstream: `http://localhost:${worker.port}`,
+      prefix: `/worker/${worker.path}`,
       http2: false,
     };
   });

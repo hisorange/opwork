@@ -8,7 +8,7 @@
   "license": "GPL-3.0",
   "private": false,
   "scripts": {
-    "build:server": "tsc -p tsconfig.server.json",
+    "build:server": "tsc -p tsconfig.json",
     "build:admin": "vite build",
     "dev": "ts-node src/server/main.ts",
     "prebuild": "rimraf dist",
@@ -20,7 +20,10 @@
     "@fastify/static": "^6.5.0",
     "fastify": "^4.6.0",
     "middie": "^7.1.0",
+    "reflect-metadata": "^0.1.13",
     "signale": "^1.4.0",
+    "sqlite3": "^5.1.1",
+    "typeorm": "^0.3.10",
     "workerd": "^1.20220926.3"
   },
   "devDependencies": {

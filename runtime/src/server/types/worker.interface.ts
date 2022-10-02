@@ -1,4 +1,5 @@
-export interface IWorker {
-  name: string; // hello
-  port: number; // 8080
+import { WorkerEntity } from '../models/workers.entity';
+
+export interface IWorker extends WorkerEntity {
+  port: number; // 10000
 }

@@ -1,24 +1,26 @@
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { mkdir, writeFile } from 'fs/promises';
+import { dirname, join } from 'path';
 import signale from 'signale';
-import { fetchServices } from './fetch-services';
+import { fetchWorkers } from './fetch-workers';
+
+const clearId = (id: string) => 'w' + id.replace(/-/g, '');
 
 export const generateWorkerdConfig = async () => {
-  const services = await fetchServices();
+  const workers = await fetchWorkers();
   const template = `using Workerd = import "/workerd/workerd.capnp";
 
   const config :Workerd.Config = (
     services = [
-      ${services
+      ${workers
         .map(
           worker =>
-            `(name = "${worker.name}", worker = .${worker.name}Worker),`,
+            `(name = "${worker.name}", worker = .${clearId(worker.id)}Worker),`,
         )
         .join('\n')}
     ],
 
     sockets = [
-      ${services
+      ${workers
         .map(
           worker =>
             `(
@@ -32,16 +34,22 @@ export const generateWorkerdConfig = async () => {
     ]
   );
 
-  ${services
+  ${workers
     .map(
       worker => `
-  const ${worker.name}Worker :Workerd.Worker = (
-    serviceWorkerScript = embed "services/${worker.name}/entry.js",
+  const ${clearId(worker.id)}Worker :Workerd.Worker = (
+    serviceWorkerScript = embed "workers/${worker.id}/entry.js",
     compatibilityDate = "2022-09-16",
   );`,
     )
     .join('\n')}`;
   signale.success('Workerd config generated');
+
+  for (const worker of workers) {
+    const path = `workers/${worker.id}/entry.js`;
+    await mkdir(dirname(path), { recursive: true });
+    await writeFile(path, worker.code);
+  }
 
   await writeFile(join(__dirname, '../../../workerd.capnp'), template);
   signale.success('Workerd config materialized');

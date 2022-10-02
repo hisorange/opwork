@@ -1,62 +1,81 @@
+import { randomUUID } from 'crypto';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { readFile, writeFile } from 'fs/promises';
-import { join } from 'path';
+import { mkdir, writeFile } from 'fs/promises';
 import signale from 'signale';
-import { IService } from '../types/service.interface';
-import { fetchServices } from './fetch-services';
+import { WorkerEntity } from '../models/workers.entity';
+import { AppDataSource } from './create-data-source';
+import { generateWorkerdConfig } from './generate-workerd-config';
 
 export const registerRestApi = async (server: FastifyInstance) => {
-  server.get('/api/services', async () => {
-    return fetchServices();
+  server.get('/api/workers', async () => {
+    return await AppDataSource.manager.find(WorkerEntity);
   });
 
   server.get(
-    '/api/services/:id',
+    '/api/workers/:id',
     async (
       req: FastifyRequest<{ Params: { id: string } }>,
       reply: FastifyReply,
     ) => {
-      const services = await fetchServices();
-      const service = services.find(service => service.name === req.params.id);
+      const worker = await AppDataSource.manager.findOne(WorkerEntity, {
+        where: {
+          id: req.params.id,
+        },
+      });
 
-      if (service) {
-        const code = await readFile(
-          join(__dirname, '../../../services/', service.name, 'entry.js'),
-          'utf-8',
-        );
-
-        return {
-          name: service.name,
-          code,
-        };
+      if (worker) {
+        return worker;
       }
 
       reply.status(404);
 
-      return { error: 'Service not found' };
+      return { error: 'Worker not found' };
     },
   );
 
   server.patch(
-    '/api/services/:id',
+    '/api/workers/:id',
     async (
-      req: FastifyRequest<{ Params: { id: string }; Body: IService }>,
-      reply: FastifyReply,
+      req: FastifyRequest<{ Params: { id: string }; Body: WorkerEntity }>,
     ) => {
-      const path = join(
-        __dirname,
-        '../../../services/',
-        req.params.id,
-        'entry.js',
-      );
+      await writeFile(`workers/${req.params.id}/entry.js`, req.body.code);
 
-      await writeFile(path, req.body.code);
-
-      return {
-        status: 'ok',
-      };
+      return await AppDataSource.manager.update(WorkerEntity, req.params.id, {
+        ...req.body,
+      });
     },
   );
+
+  server.post('/api/workers', async () => {
+    try {
+      const id = randomUUID();
+      const code = `addEventListener('fetch', event => {
+        event.respondWith(
+          new Response('My Worker // ${id}'),
+        );
+      });`;
+
+      await mkdir(`workers/${id}`, { recursive: true });
+      await writeFile(`workers/${id}/entry.js`, code);
+
+      const body = {
+        id,
+        name: 'My Worker',
+        path: id,
+        code,
+      };
+
+      await AppDataSource.manager.save(WorkerEntity, body);
+      signale.success(`Worker ${id} created`);
+
+      await generateWorkerdConfig();
+
+      return body;
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
+  });
 
   signale.success('REST API registered');
 };

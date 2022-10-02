@@ -9,25 +9,24 @@ import axios from 'axios';
 import useAxios from 'axios-hooks';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { IService } from '../../server/types/service.interface';
+import { IWorker } from '../../server/types/worker.interface';
 
 export default function EditorPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [{ data, loading, error }, refetch] = useAxios<IService>(
-    `/api/services/${id}`,
+  const [{ data, loading, error }, refetch] = useAxios<IWorker>(
+    `/api/workers/${id}`,
   );
 
-  const [serviceName, setServiceName] = useState('Service Name');
-  const [serviceDescription, setServiceDescription] = useState(
-    'Service Description',
-  );
+  const [workerName, setWorkerName] = useState('My Worker');
+  const [workerPath, setWorkerPath] = useState(id);
   const [sourceCode, setSourceCode] = useState('Hello, World');
   const [isCodeChanged, setIsCodeChanged] = useState(false);
 
   useEffect(() => {
     if (data) {
-      setServiceName(data.name);
+      setWorkerPath(data.path);
+      setWorkerName(data.name);
       setSourceCode(data.code);
     }
   }, [data]);
@@ -45,20 +44,20 @@ export default function EditorPage() {
           size: 'large',
           shape: 'square',
         }}
-        title={serviceName}
+        title={workerName}
         subTitle={`Available at ${globalThis.location.protocol}//${
           globalThis.location.hostname
         }${
           globalThis.location.port != '80' ? `:${globalThis.location.port}` : ''
-        }/service/${id}`}
+        }/worker/${workerPath}`}
         extra={[
           <Button
             key="save"
             type={isCodeChanged ? 'primary' : 'ghost'}
             icon={<SaveOutlined />}
             onClick={async () => {
-              await axios.patch(`/api/services/${id}`, {
-                name: serviceName,
+              await axios.patch(`/api/workers/${id}`, {
+                name: workerName,
                 code: sourceCode,
               });
 
@@ -75,7 +74,7 @@ export default function EditorPage() {
             type="dashed"
             icon={<PlayCircleOutlined />}
             onClick={async () => {
-              const reply = await axios.get(`/service/${id}`);
+              const reply = await axios.get(`/worker/${workerPath}`);
 
               notification.info({
                 message: 'Service executed:',
