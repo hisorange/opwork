@@ -14,7 +14,9 @@ export const generateWorkerdConfig = async () => {
       ${workers
         .map(
           worker =>
-            `(name = "${worker.name}", worker = .${clearId(worker.id)}Worker),`,
+            `(name = "${clearId(worker.id)}", worker = .${clearId(
+              worker.id,
+            )}Worker),`,
         )
         .join('\n')}
     ],
@@ -24,10 +26,10 @@ export const generateWorkerdConfig = async () => {
         .map(
           worker =>
             `(
-              name = "${worker.name}",
+              name = "${clearId(worker.id)}",
               address = "localhost:${worker.port}",
               http=(),
-              service="${worker.name}"
+              service="${clearId(worker.id)}"
             ),`,
         )
         .join('\n')}

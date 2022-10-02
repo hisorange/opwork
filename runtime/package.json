@@ -24,6 +24,7 @@
     "signale": "^1.4.0",
     "sqlite3": "^5.1.1",
     "typeorm": "^0.3.10",
+    "undici": "^5.10.0",
     "workerd": "^1.20220926.3"
   },
   "devDependencies": {

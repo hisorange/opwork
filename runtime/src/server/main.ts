@@ -29,7 +29,7 @@ export const main = async () => {
   await registerAdmin(server);
 
   await createWorkerdProcess();
-  await registerUpstreams(workers, server);
+  await registerUpstreams(server);
 
   await server.listen({ port: 3000, host: '0.0.0.0' });
 

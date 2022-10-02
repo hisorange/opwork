@@ -21,7 +21,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -qy tini li
 
 COPY --from=builder /temp/package.json package.json
 COPY --from=builder /temp/node_modules node_modules
-COPY --from=builder /temp/services services
+COPY --from=builder /temp/workers workers
 COPY --from=builder /temp/dist dist
 
 ENV NODE_ENV=production

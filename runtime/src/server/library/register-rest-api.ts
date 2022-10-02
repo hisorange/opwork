@@ -1,10 +1,11 @@
 import { randomUUID } from 'crypto';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { mkdir, writeFile } from 'fs/promises';
+import { mkdir } from 'fs/promises';
 import signale from 'signale';
 import { WorkerEntity } from '../models/workers.entity';
 import { AppDataSource } from './create-data-source';
 import { generateWorkerdConfig } from './generate-workerd-config';
+import { pathPortMap } from './port-map';
 
 export const registerRestApi = async (server: FastifyInstance) => {
   server.get('/api/workers', async () => {
@@ -38,11 +39,27 @@ export const registerRestApi = async (server: FastifyInstance) => {
     async (
       req: FastifyRequest<{ Params: { id: string }; Body: WorkerEntity }>,
     ) => {
-      await writeFile(`workers/${req.params.id}/entry.js`, req.body.code);
+      const worker = await AppDataSource.manager.findOne(WorkerEntity, {
+        where: {
+          id: req.params.id,
+        },
+      });
 
-      return await AppDataSource.manager.update(WorkerEntity, req.params.id, {
+      const previousPort = pathPortMap.get(worker!.path)!;
+      pathPortMap.delete(worker!.path);
+      pathPortMap.set(req.body.path, previousPort);
+
+      signale.info(
+        `Updating worker ${worker!.path} -> ${
+          req.body.path
+        } on port ${previousPort}`,
+      );
+
+      await AppDataSource.manager.update(WorkerEntity, req.params.id, {
         ...req.body,
       });
+
+      await generateWorkerdConfig();
     },
   );
 
@@ -56,7 +73,6 @@ export const registerRestApi = async (server: FastifyInstance) => {
       });`;
 
       await mkdir(`workers/${id}`, { recursive: true });
-      await writeFile(`workers/${id}/entry.js`, code);
 
       const body = {
         id,
@@ -69,6 +85,8 @@ export const registerRestApi = async (server: FastifyInstance) => {
       signale.success(`Worker ${id} created`);
 
       await generateWorkerdConfig();
+
+      pathPortMap.set(id, 10_000 + pathPortMap.size);
 
       return body;
     } catch (error) {

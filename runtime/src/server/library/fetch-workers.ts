@@ -7,7 +7,7 @@ export const fetchWorkers = async (): Promise<IWorker[]> => {
 
   const workers = await AppDataSource.manager.find(WorkerEntity, {
     order: {
-      id: 'ASC',
+      createdAt: 'ASC',
     },
   });
 
