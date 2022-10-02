@@ -24,7 +24,7 @@ Then visit the [localhost](http://localhost) address to see the administration p
 
 - [x] Dockerized instance
 - [x] Demo site
-- [ ] Persistent storage
+- [x] Persistent storage
 - [ ] Authentication
 - [ ] Log collector
 - [ ] Community share platform
