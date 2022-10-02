@@ -11,7 +11,6 @@ COPY . .
 ENV NODE_ENV=production
 RUN ["yarn", "build"]
 
-RUN ["yarn", "install", "--frozen-lockfile", "--production", "--ignore-engines"]
 
 # Production stage, thinner image with only what we need
 FROM node:18 AS production
@@ -20,9 +19,10 @@ WORKDIR /srv
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -qy tini libc++1 && apt-get clean
 
 COPY --from=builder /temp/package.json package.json
-COPY --from=builder /temp/node_modules node_modules
 COPY --from=builder /temp/workers workers
 COPY --from=builder /temp/dist dist
+
+RUN ["yarn", "install", "--frozen-lockfile", "--production", "--ignore-engines"]
 
 ENV NODE_ENV=production
 ENV PORT=3000
