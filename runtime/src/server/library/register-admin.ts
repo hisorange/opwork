@@ -1,9 +1,11 @@
 import staticMiddleware from '@fastify/static';
-
 import { FastifyInstance } from 'fastify';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import signale from 'signale';
+import * as url from 'url';
+
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export const registerAdmin = async (server: FastifyInstance) => {
   server.get('/', (req, rep) => {
@@ -48,11 +50,11 @@ export const registerAdmin = async (server: FastifyInstance) => {
   } else {
     const dir = join(__dirname, '../../../');
 
-    const viteConfig = require(join(dir, 'vite.config.js'));
+    const viteConfig = await import(join(dir, 'vite.config.js'));
 
-    const vite = require('vite');
+    const vite = await import('vite');
     const viteServer = await vite.createServer(viteConfig);
-    const middie = require('middie');
+    const middie = await import('@fastify/middie');
     const middlewares = viteServer.middlewares;
 
     await server.register(middie as any);

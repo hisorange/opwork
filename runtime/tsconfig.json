@@ -1,19 +1,22 @@
 {
   "compilerOptions": {
     "incremental": false,
-    "target": "es2020",
+    "target": "esnext",
     "jsx": "preserve",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "commonjs",
+    "module": "esnext",
+    "lib": ["esnext"],
     "rootDir": "./src",
-    "moduleResolution": "node",
     "outDir": "./dist",
-    "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-    "strictPropertyInitialization": false
+    "strictPropertyInitialization": false,
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
   "include": ["./src/server/**/*.ts"]
 }

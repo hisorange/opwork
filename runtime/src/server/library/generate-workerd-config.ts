@@ -40,7 +40,7 @@ export const generateWorkerdConfig = async () => {
     .map(
       worker => `
   const ${clearId(worker.id)}Worker :Workerd.Worker = (
-    serviceWorkerScript = embed "workers/${worker.id}/entry.js",
+    serviceWorkerScript = embed "${worker.id}/entry.js",
     compatibilityDate = "2022-09-16",
   );`,
     )
@@ -48,11 +48,11 @@ export const generateWorkerdConfig = async () => {
   signale.success('Workerd config generated');
 
   for (const worker of workers) {
-    const path = `workers/${worker.id}/entry.js`;
+    const path = `temp/${worker.id}/entry.js`;
     await mkdir(dirname(path), { recursive: true });
     await writeFile(path, worker.code);
   }
 
-  await writeFile(join(__dirname, '../../../workerd.capnp'), template);
+  await writeFile(join(process.cwd(), 'temp/workerd.capnp'), template);
   signale.success('Workerd config materialized');
 };

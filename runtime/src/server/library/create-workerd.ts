@@ -1,26 +1,36 @@
-import { exec } from 'child_process';
+import { spawn } from 'child_process';
 import signale from 'signale';
 import { generateWorkerdConfig } from './generate-workerd-config';
 
 export const createWorkerdProcess = async () => {
   await generateWorkerdConfig();
 
+  const controller = new AbortController();
+  const { signal } = controller;
+
   signale.info('Workderd starting');
 
-  return exec(
-    'workerd serve workerd.capnp --watch --verbose',
-    (error, stdout, stderr) => {
-      if (error) {
-        signale.error(error);
-        return;
-      }
-
-      if (stderr) {
-        signale.error(stderr);
-        return;
-      }
-
-      signale.info(stdout);
-    },
+  const p = spawn(
+    'workerd',
+    ['serve', 'temp/workerd.capnp', '--watch', '--verbose'],
+    { signal },
   );
+
+  p.stdout.on('data', data => {
+    signale.info('workerd', data.toString());
+  });
+
+  p.stderr.on('data', data => {
+    signale.info('workerd', data.toString());
+  });
+
+  process.on('SIGINT', () => {
+    signale.info('Workderd stopping');
+    controller.abort();
+  });
+
+  process.on('SIGTERM', () => {
+    signale.info('Workderd stopping');
+    controller.abort();
+  });
 };

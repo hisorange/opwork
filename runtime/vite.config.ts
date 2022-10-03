@@ -1,11 +1,11 @@
-const { join } = require('path');
-const { defineConfig } = require('vite');
-const react = require('@vitejs/plugin-react');
+import react from '@vitejs/plugin-react';
+import { join } from 'path';
+import { defineConfig } from 'vite';
 
 const plugins = [react()];
 
 // vite.config.js
-module.exports = defineConfig({
+export default defineConfig({
   css: {
     preprocessorOptions: {
       less: {
@@ -21,11 +21,11 @@ module.exports = defineConfig({
     hmr: true,
   },
   logLevel: 'info',
-  root: join(__dirname, 'src/view/'),
+  root: join(process.cwd(), 'src/view/'),
   publicDir: 'assets',
   base: '/admin/',
   build: {
-    outDir: join(__dirname, './dist/view/'),
+    outDir: join(process.cwd(), './dist/view/'),
     emptyOutDir: true,
   },
 });

@@ -1,5 +1,5 @@
 FROM node:18-alpine AS builder
-WORKDIR /temp
+WORKDIR /srv
 
 COPY package.json package.json
 COPY yarn.lock yarn.lock
@@ -17,9 +17,9 @@ WORKDIR /srv
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -qy tini libc++1 && apt-get clean
 
-COPY --from=builder /temp/package.json package.json
-COPY --from=builder /temp/workers workers
-COPY --from=builder /temp/dist dist
+COPY --from=builder /srv/package.json package.json
+COPY --from=builder /srv/temp temp
+COPY --from=builder /srv/dist dist
 
 RUN ["yarn", "install", "--frozen-lockfile", "--production", "--ignore-engines"]
 

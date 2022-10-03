@@ -1,6 +1,5 @@
 import { randomUUID } from 'crypto';
 import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
-import { mkdir } from 'fs/promises';
 import signale from 'signale';
 import { WorkerEntity } from '../models/workers.entity';
 import { AppDataSource } from './create-data-source';
@@ -71,8 +70,6 @@ export const registerRestApi = async (server: FastifyInstance) => {
           new Response('My Worker // ${id}'),
         );
       });`;
-
-      await mkdir(`workers/${id}`, { recursive: true });
 
       const body = {
         id,
