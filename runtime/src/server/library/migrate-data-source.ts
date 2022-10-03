@@ -1,9 +1,11 @@
+import { Context } from '@loopback/context';
+import { Bindings } from '../bindings';
 import { WorkerEntity } from '../models/workers.entity';
-import { AppDataSource } from './create-data-source';
 
-export const migrateDataSource = async () => {
+export const migrateDataSource = async (ctx: Context) => {
+  const dataSource = await ctx.get(Bindings.DataSource);
   // Count the workers, if 0 then install the demo worker.
-  const workerCount = await AppDataSource.manager.count(WorkerEntity);
+  const workerCount = await dataSource.manager.count(WorkerEntity);
 
   if (workerCount === 0) {
     // Install the demo worker.
@@ -17,6 +19,6 @@ export const migrateDataSource = async () => {
       );
     });`;
 
-    await AppDataSource.manager.save(worker);
+    await dataSource.manager.save(worker);
   }
 };

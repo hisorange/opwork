@@ -1,14 +1,17 @@
+import { Context } from '@loopback/context';
 import axios from 'axios';
-import { FastifyInstance, FastifyRequest } from 'fastify';
+import { FastifyRequest } from 'fastify';
 import signale from 'signale';
+import { Bindings } from '../bindings';
 import { fetchWorkers } from './fetch-workers';
-import { pathPortMap } from './port-map';
 
-export const registerUpstreams = async (server: FastifyInstance) => {
-  const workers = await fetchWorkers();
+export const registerUpstreams = async (ctx: Context) => {
+  const server = await ctx.get(Bindings.Server);
+  const workers = await fetchWorkers(ctx);
+  const portMap = await ctx.get(Bindings.PortMap);
 
   for (const worker of workers) {
-    pathPortMap.set(worker.path, worker.port);
+    portMap.set(worker.path, worker.port);
     signale.info(`Registering upstream ${worker.path} -> ${worker.port}`);
   }
 
@@ -19,13 +22,13 @@ export const registerUpstreams = async (server: FastifyInstance) => {
       request: FastifyRequest<{ Params: { workerPath: string } }>,
       reply,
     ) => {
-      if (!pathPortMap.has(request.params.workerPath)) {
+      if (!portMap.has(request.params.workerPath)) {
         signale.warn(`Worker ${request.params.workerPath} not found`);
 
         return reply.status(404).send();
       }
 
-      const port = pathPortMap.get(request.params.workerPath);
+      const port = portMap.get(request.params.workerPath);
       const path = request.raw
         .url!.toString()
         .replace(`/worker/${request.params.workerPath}`, '');

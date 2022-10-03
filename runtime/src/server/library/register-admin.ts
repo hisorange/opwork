@@ -1,13 +1,16 @@
 import staticMiddleware from '@fastify/static';
-import { FastifyInstance } from 'fastify';
+import { Context } from '@loopback/context';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import signale from 'signale';
 import * as url from 'url';
+import { Bindings } from '../bindings';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
-export const registerAdmin = async (server: FastifyInstance) => {
+export const registerAdmin = async (ctx: Context) => {
+  const server = await ctx.get(Bindings.Server);
+
   server.get('/', (req, rep) => {
     rep.redirect('/admin');
   });

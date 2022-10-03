@@ -23,6 +23,7 @@
     "@fastify/secure-session": "^5.2.0",
     "@fastify/static": "^6.5.0",
     "@fastify/swagger": "^7.6.1",
+    "@loopback/context": "^5.0.3",
     "axios": "^0.27.2",
     "fastify": "^4.6.0",
     "fastify-http-errors-enhanced": "^4.0.3",

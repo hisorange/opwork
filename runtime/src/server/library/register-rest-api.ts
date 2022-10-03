@@ -1,14 +1,18 @@
+import { Context } from '@loopback/context';
 import { randomUUID } from 'crypto';
-import { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import signale from 'signale';
+import { Bindings } from '../bindings';
 import { WorkerEntity } from '../models/workers.entity';
-import { AppDataSource } from './create-data-source';
 import { generateWorkerdConfig } from './generate-workerd-config';
-import { pathPortMap } from './port-map';
 
-export const registerRestApi = async (server: FastifyInstance) => {
+export const registerRestApi = async (ctx: Context) => {
+  const server = await ctx.get(Bindings.Server);
+  const dataSource = await ctx.get(Bindings.DataSource);
+  const portMap = await ctx.get(Bindings.PortMap);
+
   server.get('/api/workers', async () => {
-    return await AppDataSource.manager.find(WorkerEntity);
+    return await dataSource.manager.find(WorkerEntity);
   });
 
   server.get(
@@ -17,7 +21,7 @@ export const registerRestApi = async (server: FastifyInstance) => {
       req: FastifyRequest<{ Params: { id: string } }>,
       reply: FastifyReply,
     ) => {
-      const worker = await AppDataSource.manager.findOne(WorkerEntity, {
+      const worker = await dataSource.manager.findOne(WorkerEntity, {
         where: {
           id: req.params.id,
         },
@@ -38,15 +42,15 @@ export const registerRestApi = async (server: FastifyInstance) => {
     async (
       req: FastifyRequest<{ Params: { id: string }; Body: WorkerEntity }>,
     ) => {
-      const worker = await AppDataSource.manager.findOne(WorkerEntity, {
+      const worker = await dataSource.manager.findOne(WorkerEntity, {
         where: {
           id: req.params.id,
         },
       });
 
-      const previousPort = pathPortMap.get(worker!.path)!;
-      pathPortMap.delete(worker!.path);
-      pathPortMap.set(req.body.path, previousPort);
+      const previousPort = portMap.get(worker!.path)!;
+      portMap.delete(worker!.path);
+      portMap.set(req.body.path, previousPort);
 
       signale.info(
         `Updating worker ${worker!.path} -> ${
@@ -54,11 +58,11 @@ export const registerRestApi = async (server: FastifyInstance) => {
         } on port ${previousPort}`,
       );
 
-      await AppDataSource.manager.update(WorkerEntity, req.params.id, {
+      await dataSource.manager.update(WorkerEntity, req.params.id, {
         ...req.body,
       });
 
-      await generateWorkerdConfig();
+      await generateWorkerdConfig(ctx);
     },
   );
 
@@ -78,12 +82,12 @@ export const registerRestApi = async (server: FastifyInstance) => {
         code,
       };
 
-      await AppDataSource.manager.save(WorkerEntity, body);
+      await dataSource.manager.save(WorkerEntity, body);
       signale.success(`Worker ${id} created`);
 
-      await generateWorkerdConfig();
+      await generateWorkerdConfig(ctx);
 
-      pathPortMap.set(id, 10_000 + pathPortMap.size);
+      portMap.set(id, 10_000 + portMap.size);
 
       return body;
     } catch (error) {

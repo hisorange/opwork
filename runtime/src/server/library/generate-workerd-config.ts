@@ -1,3 +1,4 @@
+import { Context } from '@loopback/context';
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import signale from 'signale';
@@ -5,8 +6,8 @@ import { fetchWorkers } from './fetch-workers';
 
 const clearId = (id: string) => 'w' + id.replace(/-/g, '');
 
-export const generateWorkerdConfig = async () => {
-  const workers = await fetchWorkers();
+export const generateWorkerdConfig = async (ctx: Context) => {
+  const workers = await fetchWorkers(ctx);
   const template = `using Workerd = import "/workerd/workerd.capnp";
 
   const config :Workerd.Config = (

@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import signale from 'signale';
-import { AppDataSource } from './library/create-data-source';
-import { createHttpServer } from './library/create-http-server';
+import { Bindings } from './bindings';
+import { createContext } from './context';
 import { createWorkerdProcess } from './library/create-workerd';
 import { migrateDataSource } from './library/migrate-data-source';
 import { registerAdmin } from './library/register-admin';
@@ -9,16 +9,15 @@ import { registerRestApi } from './library/register-rest-api';
 import { registerUpstreams } from './library/register-upstreams';
 
 export const main = async () => {
-  const server = await createHttpServer();
+  const ctx = createContext();
 
-  await AppDataSource.initialize();
-  await migrateDataSource();
+  await migrateDataSource(ctx);
+  await registerRestApi(ctx);
+  await registerAdmin(ctx);
+  await createWorkerdProcess(ctx);
+  await registerUpstreams(ctx);
 
-  await registerRestApi(server);
-  await registerAdmin(server);
-
-  await createWorkerdProcess();
-  await registerUpstreams(server);
+  const server = await ctx.get(Bindings.Server);
 
   await server.listen({ port: 3000, host: '0.0.0.0' });
 

@@ -1,9 +1,10 @@
+import { Context } from '@loopback/context';
 import { spawn } from 'child_process';
 import signale from 'signale';
 import { generateWorkerdConfig } from './generate-workerd-config';
 
-export const createWorkerdProcess = async () => {
-  await generateWorkerdConfig();
+export const createWorkerdProcess = async (ctx: Context) => {
+  await generateWorkerdConfig(ctx);
 
   const controller = new AbortController();
   const { signal } = controller;
