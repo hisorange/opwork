@@ -2,9 +2,9 @@ import { Context } from '@loopback/context';
 import { randomUUID } from 'crypto';
 import { FastifyReply, FastifyRequest } from 'fastify';
 import signale from 'signale';
-import { Bindings } from '../bindings';
-import { WorkerEntity } from '../models/workers.entity';
-import { generateWorkerdConfig } from './generate-workerd-config';
+import { Bindings } from '../bindings.js';
+import { WorkerEntity } from '../models/workers.entity.js';
+import { generateWorkerdConfig } from './generate-workerd-config.js';
 
 export const registerRestApi = async (ctx: Context) => {
   const server = await ctx.get(Bindings.Server);

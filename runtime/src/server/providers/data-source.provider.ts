@@ -1,7 +1,7 @@
 import { Provider } from '@loopback/context';
 import { join } from 'path';
 import { DataSource } from 'typeorm';
-import { WorkerEntity } from '../models/workers.entity';
+import { WorkerEntity } from '../models/workers.entity.js';
 
 export class DataSourceProvider implements Provider<DataSource> {
   async value(): Promise<DataSource> {

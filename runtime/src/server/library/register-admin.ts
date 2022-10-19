@@ -4,7 +4,7 @@ import { readFile } from 'fs/promises';
 import { join } from 'path';
 import signale from 'signale';
 import * as url from 'url';
-import { Bindings } from '../bindings';
+import { Bindings } from '../bindings.js';
 
 const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 

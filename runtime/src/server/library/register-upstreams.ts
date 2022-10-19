@@ -2,8 +2,8 @@ import { Context } from '@loopback/context';
 import axios from 'axios';
 import { FastifyRequest } from 'fastify';
 import signale from 'signale';
-import { Bindings } from '../bindings';
-import { fetchWorkers } from './fetch-workers';
+import { Bindings } from '../bindings.js';
+import { fetchWorkers } from './fetch-workers.js';
 
 export const registerUpstreams = async (ctx: Context) => {
   const server = await ctx.get(Bindings.Server);

@@ -1,6 +1,6 @@
 import { Context } from '@loopback/context';
-import { Bindings } from '../bindings';
-import { WorkerEntity } from '../models/workers.entity';
+import { Bindings } from '../bindings.js';
+import { WorkerEntity } from '../models/workers.entity.js';
 
 export const migrateDataSource = async (ctx: Context) => {
   const dataSource = await ctx.get(Bindings.DataSource);

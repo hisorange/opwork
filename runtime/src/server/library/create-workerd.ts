@@ -1,7 +1,7 @@
 import { Context } from '@loopback/context';
 import { spawn } from 'child_process';
 import signale from 'signale';
-import { generateWorkerdConfig } from './generate-workerd-config';
+import { generateWorkerdConfig } from './generate-workerd-config.js';
 
 export const createWorkerdProcess = async (ctx: Context) => {
   await generateWorkerdConfig(ctx);

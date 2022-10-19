@@ -2,7 +2,7 @@ import { Context } from '@loopback/context';
 import { mkdir, writeFile } from 'fs/promises';
 import { dirname, join } from 'path';
 import signale from 'signale';
-import { fetchWorkers } from './fetch-workers';
+import { fetchWorkers } from './fetch-workers.js';
 
 const clearId = (id: string) => 'w' + id.replace(/-/g, '');
 

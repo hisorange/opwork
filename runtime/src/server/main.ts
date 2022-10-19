@@ -1,12 +1,12 @@
 import 'reflect-metadata';
 import signale from 'signale';
-import { Bindings } from './bindings';
-import { createContext } from './context';
-import { createWorkerdProcess } from './library/create-workerd';
-import { migrateDataSource } from './library/migrate-data-source';
-import { registerAdmin } from './library/register-admin';
-import { registerRestApi } from './library/register-rest-api';
-import { registerUpstreams } from './library/register-upstreams';
+import { Bindings } from './bindings.js';
+import { createContext } from './context.js';
+import { createWorkerdProcess } from './library/create-workerd.js';
+import { migrateDataSource } from './library/migrate-data-source.js';
+import { registerAdmin } from './library/register-admin.js';
+import { registerRestApi } from './library/register-rest-api.js';
+import { registerUpstreams } from './library/register-upstreams.js';
 
 export const main = async () => {
   const ctx = createContext();
